@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   name: "SearchBar",
    data() {
@@ -22,18 +23,11 @@ export default {
     }
   }, 
   methods: {
-    async searchCity(){
-      const Api_Key = '265257b62109cf6dcfc55ed5a3926ced';
-      const weatherUrl = `http://api.openweathermap.org/data/2.5/forecast?q=${this.search}&appid=${Api_Key}&units=metric`;
-      const weatherData = await fetch(weatherUrl);
-      const body = await weatherData.json();
-      body.list?
-      (this.$eventHub.$emit('weather-data', body.list),
-      this.$eventHub.$emit('search-error', '')):
-      this.$eventHub.$emit('search-error', body.message);
+    ...mapActions(['fetchWeatherData']),
+    searchCity(){
+      // this.fetchWeatherData comes from mapActions
+      this.fetchWeatherData(this.search);
     }
   }
 };
 </script>
-
-<style></style>

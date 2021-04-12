@@ -29,11 +29,6 @@ export default {
     hour: String,
     date: String,
     temp: Number
-  },
-  data() {
-    return {}
   }
 }
 </script>
-
-<style></style>

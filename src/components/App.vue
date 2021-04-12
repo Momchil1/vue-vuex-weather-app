@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="container">
     <SearchBar />
-    <MainForecast :weatherData="weatherData"/>
+    <MainForecast />
     <Modal />
   </div>
 </template>
@@ -17,16 +17,6 @@ export default {
     SearchBar,
     MainForecast,
     Modal
-  },
-  data() {
-    return {
-      weatherData: []
-    }
-  },
-  created(){
-    this.$eventHub.$on('weather-data', (weatherData) => {
-        this.weatherData = weatherData;
-    });
   }
 }
 </script>

@@ -4,7 +4,7 @@
     <div class="modal-wrapper">
       <div class="modal-content">
         <div class="modal-header">
-          <span class="modal-close" @click="openModal = false">&times;</span>
+          <span class="modal-close" @click="closeModal()">&times;</span>
         </div>
         <div class="modal-body">
           <div class="d-flex flex-column justify-content-center slick-container">
@@ -28,6 +28,7 @@
 <script>
 import Slider from "vue-slick-carousel";
 import HourlyForecast from "./HourlyForecast";
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: "Modal",
@@ -37,9 +38,7 @@ export default {
   },
   data() {
     return {
-      sliderSettings: {},
-      openModal: false,
-      selectedHourlyData: []
+      sliderSettings: {}
     };
   },
   methods: {
@@ -49,21 +48,21 @@ export default {
     date: function(data) {
       return new Date(data.dt * 1000).toLocaleDateString('en-US', {month: '2-digit', day: '2-digit'});
     },
+    closeModal: function(){
+        this.toggleModal(false);
+    },
+    ...mapActions(['toggleModal'])
+  },
+  computed: {
+    // getting data from the store
+    ...mapGetters(['openModal', 'selectedHourlyData'])
   },
   created() {
     this.sliderSettings = {
-    //   class: "center",
       infinite: false,
-    //   centerPadding: "60px",
       slidesToShow: 5,
       swipeToSlide: true,
     };
-    this.$eventHub.$on('hourly-data', (hourlyData) => {
-        this.selectedHourlyData = hourlyData;
-    });
-    this.$eventHub.$on('open-modal', (data) => {
-        this.openModal = data;
-    });
   },
 };
 </script>

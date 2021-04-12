@@ -16,19 +16,16 @@
 
 <script>
 import DailyForecast from "./DailyForecast";
+import { mapGetters, mapActions } from 'vuex';
 import { aggregateDailyData, getDailyData } from '../utils/dailyData';
 
 export default {
   name: "MainForecast",
   components: { DailyForecast },
-  props: {
-      weatherData: Array
-  },
   data() {
     return {
       dailyData: [],
-      aggregatedDailyData: {},
-      error: ''
+      aggregatedDailyData: {}
     }
   },
   methods: {
@@ -39,19 +36,20 @@ export default {
       return new Date(data.dt * 1000).toLocaleDateString('en-US', {month: '2-digit', day: '2-digit'});
     },
     openModal: function(){
-        this.$eventHub.$emit('open-modal', true);
-    }
+        this.toggleModal(true);
+    },
+    ...mapActions(['toggleModal'])
   },
   watch: {
     weatherData(){
-        this.aggregatedDailyData = aggregateDailyData(this.weatherData);
-        this.dailyData = getDailyData(this.aggregatedDailyData);
+      // this.weatherData comes from mapGetters
+      this.aggregatedDailyData = aggregateDailyData(this.weatherData);
+      this.dailyData = getDailyData(this.aggregatedDailyData);
     }
   },
-  created(){
-    this.$eventHub.$on('search-error', (data) => {
-        this.error = data;
-    });
+  computed: {
+    // getting data from the store
+    ...mapGetters(['weatherData', 'error'])
   }
 };
 </script>

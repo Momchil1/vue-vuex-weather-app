@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   name: "DailyForecast",
   props: {
@@ -39,9 +41,10 @@ export default {
     }
   },
   methods: {
-      getHourlyData(){
-        this.$eventHub.$emit('hourly-data', this.hourlyData);
-      }
+    getHourlyData(){
+      this.getHourlyForecast(this.hourlyData);
+    },
+    ...mapActions(['getHourlyForecast'])
   },
   created(){
     this.hourlyData = this.aggregatedDailyData.get(this.forecast.day);
